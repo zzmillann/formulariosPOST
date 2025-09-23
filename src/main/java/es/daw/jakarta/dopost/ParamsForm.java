@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
@@ -91,12 +92,8 @@ try(PrintWriter out = resp.getWriter()){
                 </head>
                 <body>
                     <h1>Informe de formulario</h1>
-                    
-                    
-                    
-                    
-                    
-                <ul>
+                      
+                    <ul>
             """);
 
     if (!errores.isEmpty()){
@@ -104,10 +101,13 @@ try(PrintWriter out = resp.getWriter()){
         errores.forEach(err -> out.printf("<li>%s</li>\n", err));
     }else{
 
-            String lenguajesHtml = "";
-            for  (String lenguaje : lenguajes){
-                lenguajesHtml += "<li>" + lenguaje + "</li>\n";
-            }
+           String lenguajesHtml = Arrays.stream(lenguajes)
+                   .map(lenguaj -> "<li>"+lenguaj+"</li>")
+                   .collect(Collectors.joining(""));
+
+            String rolesHtml = Arrays.stream(roles)
+                    .map(rol -> "<li>"+rol+"</li>")
+                    .collect(Collectors.joining(""));
 
 
         String htmlBody = """
@@ -120,15 +120,22 @@ try(PrintWriter out = resp.getWriter()){
                 <li>
                     <ul>
                         <li>Roles : %s</li>
-                        <li>Pais : %s</li>
                      </ul>
-                 <li>
-        """.formatted(username,password,email)
+                <li>
+                 <li>Pais : %s</li>
+        """.formatted(username,password,email, lenguajesHtml , habilitar, secreto, rolesHtml, pais);
+        out.println(htmlBody);
     }
 
-
-}
+    out.println("""
+                            </ul>
+                            <p><a href="index.jsp">volver</a></p>
+                        </body>
+                    </html>
+                    """);
+}// end del try
 
     }
 
-}
+    }
+
