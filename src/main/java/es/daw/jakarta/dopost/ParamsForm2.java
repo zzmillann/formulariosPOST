@@ -84,12 +84,28 @@ if(email.isBlank() || !email.contains("@")){
 if (idioma == null){
     errores.put("idioma","El idioma es requerido");
 }
-//3 RESPONSE CON HTML
 
+// guardamos en base de datos el nuevo usuario
+
+// damo por hechp que no hay errpr al guardar en bd
+
+        String message = "";
+        if(!errores.isEmpty() && errores != null){
+
+            message= "has tenido un error!";
+        }else{
+             message = "bienvenido al sistema";  //simulando que ha ido todo bien
+
+        }
+
+
+//3 RESPONSE CON HTML
+// una vez que relleno el formulario devuelvo el formulario relleno con un mensaje de bienvenida
 //añado el map de errores en el objeto request
 
         req.setAttribute("errores", errores);
 
+        req.setAttribute("mensaje",message);
 //redirigir la salida
 
         getServletContext().getRequestDispatcher("/index2.jsp").forward(req, resp);
